@@ -105,20 +105,20 @@ public class RoverServiceImpl implements RoverService {
                         case "M":
                             moveRover(position);
                             break;
+                        default: throw new IllegalArgumentException("Invalid!!Instructions only can be L, M or R : "+roverExploreInstructions[i]);
                     }
                 }else
                 {
                     System.out.println("can not go outside from the plateau");
                 }
-
             }
-
-
             System.out.println(x+" "+y+" "+position);
 
         }
         catch (Exception ex){
-
+            System.out.println("An error occur when getting finalCoordinatesAndHeading");
+            System.out.println(ex.getMessage());
+            throw ex;
         }
     }
 
@@ -126,14 +126,13 @@ public class RoverServiceImpl implements RoverService {
     {
         try
         {
-            if(coordinates!=null)
-            {
-                return Arrays.stream(coordinates.split(" ")).mapToInt(Integer::parseInt).toArray();
-            }else return null;
+            return Arrays.stream(coordinates.split(" ")).mapToInt(Integer::parseInt).toArray();
         }
         catch (Exception ex)
         {
-            return null;
+            System.out.println("An error occur when getPlateauCoordinates");
+            System.out.println(ex.getMessage());
+            throw ex;
         }
     }
 
@@ -170,8 +169,7 @@ public class RoverServiceImpl implements RoverService {
 
     private void moveRover(String pos)
     {
-        if(pos!=null)
-        {
+        try{
             switch (pos)
             {
                 case "N":
@@ -187,26 +185,45 @@ public class RoverServiceImpl implements RoverService {
                     x = x - 1;
                     break;
             }
+        }catch (Exception ex){
+            System.out.println("An error occur when moveRover");
+            System.out.println(ex.getMessage());
+            throw ex;
         }
     }
 
     private Map<String,String> getLeftPositionMap()
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("N","W");
-        map.put("E","N");
-        map.put("S","E");
-        map.put("W","S");
-        return map;
+        try {
+            Map<String, String> map = new HashMap<>();
+            map.put("N","W");
+            map.put("E","N");
+            map.put("S","E");
+            map.put("W","S");
+            return map;
+
+        }catch (Exception ex){
+            System.out.println("An error occur when getLeftPositionMap");
+            System.out.println(ex.getMessage());
+            throw ex;
+        }
+
     }
 
     private Map<String,String> getRightPositionMap()
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("N","E");
-        map.put("E","S");
-        map.put("S","W");
-        map.put("W","N");
-        return map;
+        try {
+            Map<String, String> map = new HashMap<>();
+            map.put("N","E");
+            map.put("E","S");
+            map.put("S","W");
+            map.put("W","N");
+            return map;
+
+        }catch (Exception ex){
+            System.out.println("An error occur when getRightPositionMap");
+            System.out.println(ex.getMessage());
+            throw ex;
+        }
     }
 }
