@@ -3,34 +3,76 @@ package com.grubtech.controller;
 import com.grubtech.service.Impl.RoverServiceImpl;
 import com.grubtech.service.RoverService;
 
-import java.util.Scanner;
+
 
 
 public class RoverController {
 
-    RoverService _roverService;
+    RoverService roverService;
 
 
     public RoverController()
     {
-        _roverService = new RoverServiceImpl();
+        roverService = new RoverServiceImpl();
     }
 
     public void start() {
-
-
-        String coordinates = _roverService.getCoordinates();
-
+        String coordinates = "";
         int i = 1;
+        String roverPosition = "";
+        String exploreInstructions = "";
+        boolean exc=false;
+        boolean exc1=false;
+
+        while (!exc) {
+            try {
+                coordinates = roverService.getCoordinates();
+                exc = true;
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+                continue;
+            } catch (Exception ex) {
+                System.out.println("An error occurred when getting coordinates from user : "+ex.getMessage());
+                continue;
+        }
+
+        }
+
         while(true)
         {
-            String roverPosition = _roverService.getPosition(i);
+            try {
+                try {
+                    roverPosition = roverService.getPosition(i);
+                    exc1=false;
+                } catch (IllegalArgumentException ex) {
+                    System.out.println(ex.getMessage());
+                    continue;
+                }catch (Exception ex){
+                    System.out.println("An error occurred when getting roverPosition from user :"+ex.getMessage());
+                    continue;
+                }
+                while (!exc1) {
+                    try {
+                        exploreInstructions = roverService.getInstructions(i);
+                        roverService.getfinalCoordinatesAndHeading(coordinates, roverPosition, exploreInstructions);
+                        exc1=true;
+                    } catch (IllegalArgumentException ex) {
+                        System.out.println(ex.getMessage());
+                        continue;
+                    } catch (Exception ex) {
+                        System.out.println("An error occurred when getting exploreInstructions from user :"+ex.getMessage());
+                        continue;
+                    }
+                }
 
-            String exploreInstructions = _roverService.getInstructions(i);
 
-            _roverService.getfinalCoordinatesAndHeading(coordinates, roverPosition, exploreInstructions);
+                i++;
 
-            i++;
+            }catch (Exception ex){
+                System.out.println("An error occurred!! Try again Rover No :"+i);
+            }
+
+
 
 
         }

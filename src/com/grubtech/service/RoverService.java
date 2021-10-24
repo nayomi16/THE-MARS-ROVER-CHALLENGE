@@ -1,8 +1,8 @@
 package com.grubtech.service;
 
 public interface RoverService {
-    public String getCoordinates();
-    public String getPosition(int i);
-    public String getInstructions(int i);
+    public String getCoordinates() throws Exception;
+    public String getPosition(int i) throws Exception;
+    public String getInstructions(int i) throws Exception;
     public void getfinalCoordinatesAndHeading(String coordinates, String roverPosition, String exploreInstructions);
 }
